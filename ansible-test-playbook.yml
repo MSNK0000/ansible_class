@@ -1,0 +1,14 @@
+---
+- name: create file
+  hosts: "{{ ansible_target_host | default('none') }}"
+  remote_user: root
+  vars:
+    location: hyderabad
+  tasks:
+    - name: include sub task
+      include_tasks: "{{ item }}.yml"
+      with_items:
+        - sub_task
+#      when: test == "run"
+#      tags:
+#        - group1

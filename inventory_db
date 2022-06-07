@@ -1,0 +1,8 @@
+[dbservers]
+mongodb2
+#mongodb3
+[dbservers:vars]
+ansible_port=22
+ansible_connection=ssh
+ansible_user=root
+ansible_password=mike

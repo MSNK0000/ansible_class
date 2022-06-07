@@ -1,0 +1,16 @@
+---
+- name: looping
+  hosts: "{{ ansible_target_host | default('none') }}"
+  vars:
+    directory:
+      - { 'dir_name': '/app/test', 'dir_owner': 'mike' } 
+      - { 'dir_name': '/app/test1', 'dir_owner': 'mike' }
+  tasks:
+  - name: Change file ownership, group and permissions
+    file:
+      state: directory
+      path: "{{ item.dir_name }}"
+      owner: "{{ item.dir_owner }}"
+      group: root
+      mode: '0644'     
+    with_items: "{{ directory }}" 

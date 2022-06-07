@@ -1,0 +1,11 @@
+---
+region: hyderabad 
+vmname: test
+server_names:
+  - mumvm001
+  - mumvm002
+  - mumvm003
+
+server_details:
+  - { 'name': 'mumvm001', 'id': '4' }
+  - { 'name': 'mumvm002', 'id': '5' }

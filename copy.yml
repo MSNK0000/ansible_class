@@ -1,0 +1,25 @@
+- name: get the hostname
+  hosts: all 
+  remote_user: root
+  vars:
+    location: bangalore
+  tasks:
+  - name: get the stat for tmp
+    shell: "ls /etc"
+    register: etc_output
+  - name: delete the file
+    shell: "rm -f /tmp/file-{{ inventory_hostname }}"
+  - name: create the file
+    shell: "touch /tmp/file-{{ inventory_hostname }}"
+  - name: append the file
+    #debug:
+#      msg: "{{ etc_output.stdout }}"
+    shell: 'echo " TEsting one two three" > /tmp/file-{{ inventory_hostname }}'
+  - name: copy the file from node
+    fetch:
+      src: "/tmp/file-{{ inventory_hostname }}"
+      dest: "/tmp/del/file-{{ inventory_hostname }}"
+      flat: yes
+  - name: contcat the files
+    shell: "cat /tmp/del/file-{{ inventory_hostname }} >> /tmp/attachment.txt"
+    delegate_to: localhost

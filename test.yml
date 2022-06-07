@@ -1,0 +1,25 @@
+- name: get the hostname
+  hosts: all 
+  remote_user: root
+  vars:
+    location: bangalore
+  tasks:
+    - name: include sub task
+      include_tasks: "{{ item }}.yml"
+      with_items: 
+        - sub_task
+      when: test == "run"
+      tags:
+        - group1
+#    - name: Python Execution
+#      hello: 
+#        yourName: "pradeep michael"
+#      register: result
+#    - name: include vars
+#      include_vars:
+#        file: "{{ location }}.yml"
+#      no_log: true
+#    - name: display my result
+#      debug:
+#        msg: "the student name is {{ item.name }} with age {{item.age}}"
+#      with_items: "{{ student_details }}"

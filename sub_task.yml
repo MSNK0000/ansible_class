@@ -1,0 +1,13 @@
+---
+    - name: Python Execution
+      hello:
+        yourName: "pradeep michael"
+      register: result
+    - name: include vars
+      include_vars:
+        file: "{{ location }}.yml"
+#      no_log: true
+    - name: display my result
+      debug:
+        msg: "the server name is {{ item.name }} with id {{item.id}}"
+      with_items: "{{ server_details }}"

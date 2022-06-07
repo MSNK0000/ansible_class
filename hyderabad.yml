@@ -1,0 +1,11 @@
+---
+region: hyderabad 
+vmname: test
+server_names:
+  - blrvm001
+  - blrvm002
+  - blrvm003
+
+server_details:
+  - { 'name': 'blrvm001', 'id': '28' }
+  - { 'name': 'blrvm002', 'id': '32' }

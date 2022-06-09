@@ -1,0 +1,96 @@
+In Pre-task playbook, it will check firewalld status on all the servers, docker on sql server, slpad on ladap server and it will stop docker service on sql server.
+
+---
+- hosts: all
+  become: true
+  tasks:
+   - name: checking docker service on the server {{ ansible_hostname }}
+     shell: systemctl status docker | grep Active
+     register: before
+     when: ansible_hostname == "com"
+   - debug:
+       msg: "{{ before.stdout }}"
+     when: ansible_hostname == "com"
+
+   - name: checking firewall status on the server {{ ansible_hostname }}
+     shell: systemctl status firewalld | grep Active
+     register: before1
+
+   - debug:
+       msg: "{{ before1.stdout }}"
+
+   - name: checking slapd service on the server {{ ansible_hostname }}
+     shell: systemctl status slapd | grep Active
+     register: before2
+     when: ansible_hostname == "com"
+   - debug:
+       msg: "{{ before2.stdout }}"
+     when: ansible_hostname == "com"
+
+   - name: stop docker service on the server {{ ansible_hostname }}
+     shell: systemctl stop docker
+
+   - name: checking docker service on the server {{ ansible_hostname }}
+     shell: systemctl status docker | grep Active
+     register: before3
+     when: ansible_hostname == "dceslmysql01.owcadmz.com"
+   - debug:
+       msg: "{{ before3.stdout }}"
+     when: ansible_hostname == "dceslmysql01.owcadmz.com"
+
+
+In patching playbook , it will update all the packages and reboot
+
+---
+  - hosts: all
+    become: true
+    tasks:
+     - name: checking updates available on the server  ansible_hostname
+       shell: yum check-update | wc -l
+       register: updates
+
+     - name: Before patching available updates on the server ansible_hostname
+       debug:
+         msg: "{{ updates.stdout }}"
+
+     - name: updating packages on the server ansible_hostname
+       shell: yum update -y
+
+     - name: reboot the server
+       reboot:
+
+
+In Post-task, it will check the firewall status on all the servers, slapd service on ldap, docker on sql server and initialize the database.
+
+---
+- hosts: all
+  become: true
+  tasks:
+   - name: checking docker service on the server {{ ansible_hostname }}
+     shell: systemctl status docker | grep Active
+     register: before
+     when: ansible_hostname == "com"
+   - debug:
+       msg: "{{ before.stdout }}"
+     when: ansible_hostname == "com"
+
+   - name: checking firewall status on the server {{ ansible_hostname }}
+     shell: systemctl status firewalld | grep Active
+     register: before1
+
+   - debug:
+       msg: "{{ before1.stdout }}"
+
+   - name: checking slapd service on the server {{ ansible_hostname }}
+     shell: systemctl status slapd | grep Active
+     register: before2
+     when: ansible_hostname == ".com"
+   - debug:
+       msg: "{{ before2.stdout }}"
+     when: ansible_hostname == ".com"
+
+   - name: initializing aide
+    shell: sudo aide --init; sudo mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+     register: after
+   - debug:
+       msg: "{{ after.stdout }}"
